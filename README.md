@@ -3,11 +3,12 @@
 
 Aplicación en Nest con manejo de usuarios, autenticación y transacciones.
 
+## Explicación del proyecto
+
 La aplicación utiliza una base de datos MySQL.
 
 Para una mejor experiencia, decidí crear un docker-compose con la aplicación y la base de datos.
 
-## Explicación del proyecto
 
 En la primera tarea opcional, decidí usar un **Subscriber** de TypeORM para poder verificar la cantidad de transacciones del usuario y hacer un **bulk update**. La razón por la cual decidí usar **Subscriber** es porque la tarea fue muy específica con la cantidad de transacciones. Otra buena solución podría haber sido usar un **CRON** (https://docs.nestjs.com/techniques/task-scheduling) que corra un par de veces al día, cuando la aplicación no esté con mucha carga, y actualizar por **lotes**. Sin embargo, de esa manera se perdería el control de las cantidades y no sería exactamente 50.000.
 
