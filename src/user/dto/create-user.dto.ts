@@ -17,8 +17,15 @@ export class CreateUserDto {
   email: string;
 
   @ApiProperty({
+    example: 'password',
     required: true,
-    example: 'User | Admin',
+  })
+  @IsString()
+  password: string;
+
+  @ApiProperty({
+    required: true,
+    example: `${Role.User} | ${Role.Admin}`,
   })
   @IsEnum(Role)
   role: Role;

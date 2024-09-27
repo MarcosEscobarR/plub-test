@@ -6,17 +6,23 @@ import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { Result } from 'src/commons/result';
 import { UserResponseDto } from './dto/user-response.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
   constructor(
     @Inject(USER_REPOSITORY) private userRepository: Repository<User>,
   ) {}
+
   async create(createUserDto: CreateUserDto): Promise<Result<UserResponseDto>> {
     try {
-      // que hacemos con el password?
-      const user = await this.userRepository.save(createUserDto);
+      const password: string = this.hashPassword(createUserDto.password);
+      const user = await this.userRepository.save({
+        ...createUserDto,
+        password,
+      });
       const data = this.toResponseObject(user);
+
       return Result.success({ data });
     } catch (error) {
       return Result.fail({
@@ -106,5 +112,10 @@ export class UserService {
   private mapResponseObject(user: User): UserResponseDto {
     const { id, name, email, role, createdAt, updatedAt } = user;
     return { id, name, email, role, createdAt, updatedAt };
+  }
+
+  private hashPassword(password: string): string {
+    const salt = bcrypt.genSaltSync(10);
+    return bcrypt.hashSync(password, salt);
   }
 }

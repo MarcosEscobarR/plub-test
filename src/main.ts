@@ -12,6 +12,7 @@ async function bootstrap() {
     .setDescription('Documentation for Plub Test')
     .setVersion('1.0')
     .addServer('http://localhost:3000', 'Local environment')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);

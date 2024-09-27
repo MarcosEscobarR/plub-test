@@ -27,8 +27,7 @@ export class User extends Auditable {
   email: string;
 
   @Column({
-    length: 50,
-    default: '',
+    length: 100,
   })
   password: string;
 
