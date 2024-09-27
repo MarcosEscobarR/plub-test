@@ -12,7 +12,7 @@ export class TransactionSubscriber
   implements EntitySubscriberInterface<Transaction>
 {
   private readonly BATCH_SIZE = 100;
-  private readonly TRANSACTION_THRESHOLD = 3000;
+  private readonly TRANSACTION_THRESHOLD = 50000;
   constructor(dataSource: DataSource) {
     dataSource.subscribers.push(this);
   }
