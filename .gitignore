@@ -37,6 +37,8 @@ lerna-debug.log*
 
 # dotenv environment variable files
 .env
+.env.nest-app
+.env.mysql-db
 .env.development.local
 .env.test.local
 .env.production.local

@@ -37,7 +37,6 @@ export class AuthorizationGuard implements CanActivate {
         secret: env.JWT_SECRET,
       });
 
-      console.log({ payload });
       if (requiredRoles && requiredRoles.length > 0) {
         const userRoles = payload.role;
         const hasRole = requiredRoles.some((role) => userRoles.includes(role));

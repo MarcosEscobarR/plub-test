@@ -1,4 +1,8 @@
-import { NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 
 export class Result<T> {
   data: T;
@@ -7,7 +11,8 @@ export class Result<T> {
 
   constructor(data: T, message: string, statusCode: number, error?: string) {
     this.data = data;
-    this.message = this.message ?? { message: message, error: error };
+    this.message =
+      message || error ? { message: message, error: error } : undefined;
     this.statusCode = statusCode;
   }
 
@@ -20,26 +25,28 @@ export class Result<T> {
   }
 
   toHttpResponse() {
-    if (this.statusCode >= 400 && this.statusCode < 500) {
-      throw new NotFoundException({
+    if (this.statusCode === 400) {
+      throw new BadRequestException({
         message: this.message,
         error: this.data,
-        statusCode: this.statusCode,
       });
     }
 
-    // if (this.statusCode >= 200 && this.statusCode < 300) {
-    //   return {
-    //     data: this.data,
-    //     message: this.message,
-    //     statusCode: this.statusCode,
-    //   };
-    // }
+    if (this.statusCode === 404) {
+      throw new NotFoundException({
+        message: this.message,
+      });
+    }
+
+    if (this.statusCode === 500) {
+      throw new InternalServerErrorException(this.message.message);
+    }
+
+    // manejar otros status codes
 
     return {
       data: this.data,
       message: this.message,
-      statusCode: this.statusCode,
     };
   }
 }

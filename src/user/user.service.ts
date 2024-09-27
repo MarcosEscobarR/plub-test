@@ -16,6 +16,16 @@ export class UserService {
 
   async create(createUserDto: CreateUserDto): Promise<Result<UserResponseDto>> {
     try {
+      const existUser = await this.userRepository.findOne({
+        where: { email: createUserDto.email },
+      });
+
+      if (existUser) {
+        return Result.fail({
+          message: 'User already exists',
+          statusCode: 400,
+        });
+      }
       const password: string = this.hashPassword(createUserDto.password);
       const user = await this.userRepository.save({
         ...createUserDto,
@@ -27,7 +37,6 @@ export class UserService {
     } catch (error) {
       return Result.fail({
         message: 'Error creating user',
-        error: error.message,
         statusCode: 500,
       });
     }

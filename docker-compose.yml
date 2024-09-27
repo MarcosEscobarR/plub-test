@@ -1,0 +1,27 @@
+version: '3'
+services:
+  nest-app:
+    build: .
+    container_name: nest-app
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.nest-app
+    command: ["./wait-for", "mysql-db:3306", "--", "npm", "run", "start:dev"]
+    
+    depends_on:
+      - mysql-db
+
+  mysql-db:
+    image: mysql:8
+    container_name: mysql-db
+    restart: always
+    env_file:
+      - .env.mysql-db
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:
